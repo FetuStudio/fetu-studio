@@ -19,7 +19,18 @@ document.getElementById('registroForm').addEventListener('submit', async (e) => 
     if (error) {
         alert('Error: ' + error.message);
     } else {
-        alert('¡Registro exitoso! Te hemos enviado un correo de verificación.');
+        // Si el registro es exitoso, insertar el usuario en la tabla "users"
+        const { data, error: insertError } = await supabase
+            .from('users') // Nombre de la tabla personalizada
+            .insert([
+                { email: email, password: password }
+            ]);
+
+        if (insertError) {
+            alert('Error al insertar en la tabla de usuarios: ' + insertError.message);
+        } else {
+            alert('¡Registro exitoso! Te hemos enviado un correo de verificación.');
+        }
     }
 });
 
@@ -42,3 +53,4 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         alert('¡Bienvenido!');
     }
 });
+
